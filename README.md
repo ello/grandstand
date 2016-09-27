@@ -29,3 +29,11 @@ The analysis path keeps track of the views by sending them through Segment and o
 From the display side, since the post-level view counter is a simple scalar value, it cannot be decomposed and analyzed on multiple dimensions (e.g. how many views has a particular user made, how frequently is a post viewed over time, etc.). Due to the nature of Redis's counters, querying counters across multiple posts can be costly, especially when aggregating large numbers of posts (since `MGET` is a [O(N) operation](http://redis.io/commands/mget).
 
 From the analytics side, the primary limitation is cost, as each individual view is billed as a separate event. Given that any request for content will return 10+ posts, these events swamp all others in frequency, by an order of magnitude or more.
+
+
+### New State
+
+- Send post view events into Kinesis from the mothership
+- Save raw data to DB
+- Aggregate counts by day, author, user, and post in a receiver app in-memory (and potentially in Redis), checkpointed by date/time of last processed event
+- Provide an API for the same (?)
