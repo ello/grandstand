@@ -28,12 +28,18 @@ The analysis path keeps track of the views by sending them through Segment and o
 
 From the display side, since the post-level view counter is a simple scalar value, it cannot be decomposed and analyzed on multiple dimensions (e.g. how many views has a particular user made, how frequently is a post viewed over time, etc.). Due to the nature of Redis's counters, querying counters across multiple posts can be costly, especially when aggregating large numbers of posts (since `MGET` is a [O(N) operation](http://redis.io/commands/mget).
 
+In addition, keeping that many discrete counters in a single Redis instance is starting to become something of a bottleneck for us. While each counter is comparatively small, it exists for every single post/comment, which is a (not huge but not trivial) storage load.
+
 From the analytics side, the primary limitation is cost, as each individual view is billed as a separate event. Given that any request for content will return 10+ posts, these events swamp all others in frequency, by an order of magnitude or more.
 
 
 ### New State
 
-- Send post view events into Kinesis from the mothership
-- Save raw data to DB
-- Aggregate counts by day, author, user, and post in a receiver app in-memory (and potentially in Redis), checkpointed by date/time of last processed event
-- Provide an API for the same (?)
+- Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
+- Store impressions in a local database
+- Aggregate counts by dimensions of day, author, user, and post in fast storage
+- Potentially checkpoint counts by date/time of last processed event (not sure
+  if this is necessary for transition or not)
+- Provide an API for the same, including multi-GETing for efficient retrieval:
+  - GET /v1/users/:ids  # Aggregate view count across all of individual user's posts. Multi-get for multiple IDs
+  - GET /v1/posts/:ids  # View count for an individual post. Multi-get for multiple IDs.
