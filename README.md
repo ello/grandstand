@@ -1,5 +1,7 @@
+<img src="http://d324imu86q1bqn.cloudfront.net/uploads/user/avatar/641/large_Ello.1000x1000.png" width="200px" height="200px" />
+
 # Grandstand
-Service for efficiently counting views
+Service for efficiently counting impressions
 
 ## Design Goals
 
@@ -37,9 +39,42 @@ From the analytics side, the primary limitation is cost, as each individual view
 
 - Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
 - Store impressions in a local database
+
+In the future:
 - Aggregate counts by dimensions of day, author, user, and post in fast storage
 - Potentially checkpoint counts by date/time of last processed event (not sure
   if this is necessary for transition or not)
 - Provide an API for the same, including multi-GETing for efficient retrieval:
   - GET /v1/users/:ids  # Aggregate view count across all of individual user's posts. Multi-get for multiple IDs
   - GET /v1/posts/:ids  # View count for an individual post. Multi-get for multiple IDs.
+
+## Quickstart
+
+This is a vanilla Rails 5 (API) application, so getting it started is fairly
+standard:
+
+* Install RVM/Rbenv/Ruby 2.3
+* Install PostgreSQL (9.4 or newer) if you don't have it already
+* Clone this repo
+* Run `bundle install` and `bundle exec rake db:setup`
+* Fire up the API server with `bundle exec rails server`
+* Run the test suite with `bundle exec rake`
+
+##### Deployment, Operations, and Gotchas
+
+The app is pre-packaged for deployment on Heroku, so it should work to fork and
+re-push to your own Heroku remote after you create an app. A couple of caveats:
+
+- You'll need to provision a Redis instance as
+  [kinesis-stream-reader](https://github.com/ello/kinesis-stream-reader) assumes
+  that one will be available to store its local state.
+- You'll need an appropriately-sized Postgres DB addon (though a basic one
+  should be there for you by default)
+- You'll need to specify the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+  `AWS_REGION`, and `KINESIS_STREAM_NAME` environment variables
+
+## License
+Streams is released under the [MIT License](blob/master/LICENSE.txt)
+
+## Code of Conduct
+Ello was created by idealists who believe that the essential nature of all human beings is to be kind, considerate, helpful, intelligent, responsible, and respectful of others. To that end, we will be enforcing [the Ello rules](https://ello.co/wtf/policies/rules/) within all of our open source projects. If you don’t follow the rules, you risk being ignored, banned, or reported for abuse.
