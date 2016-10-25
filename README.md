@@ -57,7 +57,6 @@ standard:
 * Install PostgreSQL (9.4 or newer) if you don't have it already
 * Clone this repo
 * Run `bundle install` and `bundle exec rake db:setup`
-* Fire up the API server with `bundle exec rails server`
 * Run the test suite with `bundle exec rake`
 
 ##### Deployment, Operations, and Gotchas
@@ -74,7 +73,7 @@ re-push to your own Heroku remote after you create an app. A couple of caveats:
   `AWS_REGION`, and `KINESIS_STREAM_NAME` environment variables
 
 ## License
-Streams is released under the [MIT License](blob/master/LICENSE.txt)
+This project is released under the [MIT License](blob/master/LICENSE.txt)
 
 ## Code of Conduct
 Ello was created by idealists who believe that the essential nature of all human beings is to be kind, considerate, helpful, intelligent, responsible, and respectful of others. To that end, we will be enforcing [the Ello rules](https://ello.co/wtf/policies/rules/) within all of our open source projects. If you don’t follow the rules, you risk being ignored, banned, or reported for abuse.
