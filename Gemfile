@@ -14,6 +14,8 @@ gem 'dotenv-rails'
 group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'rspec-rails-time-metadata'
 end
 
 group :development do
