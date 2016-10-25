@@ -3,6 +3,8 @@
 # Grandstand
 Service for efficiently counting impressions
 
+[![Build Status](https://travis-ci.org/ello/grandstand.svg?branch=master)](https://travis-ci.org/ello/grandstand)
+
 ## Design Goals
 
 One of Ello's key features is the post view counter - the little number next to the eye icon in post tools that gives users an estimate of how many times that post has been served up to a user.
