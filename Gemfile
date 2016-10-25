@@ -24,4 +24,5 @@ end
 
 group :production do
   gem 'rails_12factor'
+  gem 'honeybadger', '~> 2.0'
 end
