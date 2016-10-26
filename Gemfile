@@ -10,6 +10,7 @@ gem 'kinesis-stream-reader', require: 'stream_reader', github: 'ello/kinesis-str
 
 gem 'interactor-rails'
 gem 'dotenv-rails'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem 'pry-rails'

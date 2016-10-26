@@ -1,5 +1,6 @@
 class CreateEventFromStream
   include Interactor
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
 
   def call
     if respond_to?(context.kind, true)
@@ -19,4 +20,5 @@ class CreateEventFromStream
       context.fail!(error: e)
     end
   end
+  add_transaction_tracer :post_was_viewed, category: :task
 end

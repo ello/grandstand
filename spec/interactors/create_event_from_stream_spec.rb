@@ -13,7 +13,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
     it 'stores an impression model' do
       described_class.call(kind: 'post_was_viewed', record:  record)
       expect(Impression.count).to eq(1)
-      last_impression = Impression.last
+      last_impression = Impression.first
       expect(last_impression.author_id).to eq('1')
       expect(last_impression.post_id).to eq('10')
       expect(last_impression.viewer_id).to eq('2')
@@ -38,7 +38,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
     it 'stores an impression model' do
       described_class.call(kind: 'post_was_viewed', record:  record)
       expect(Impression.count).to eq(1)
-      last_impression = Impression.last
+      last_impression = Impression.first
       expect(last_impression.author_id).to eq('1')
       expect(last_impression.post_id).to eq('10')
       expect(last_impression.viewer_id).to be_nil
