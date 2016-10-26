@@ -17,6 +17,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'rspec-rails-time-metadata'
+  gem 'database_cleaner'
 end
 
 group :development do

@@ -58,6 +58,7 @@ GEM
     builder (3.2.2)
     coderay (1.1.1)
     concurrent-ruby (1.0.2)
+    database_cleaner (1.5.3)
     diff-lcs (1.2.5)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
@@ -188,6 +189,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  database_cleaner
   dotenv-rails
   honeybadger (~> 2.0)
   interactor-rails
