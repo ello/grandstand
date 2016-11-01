@@ -10,16 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161017153308) do
+ActiveRecord::Schema.define(version: 20161101113557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "ar_internal_metadata", primary_key: "key", id: :string, force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "impressions", id: false, force: :cascade do |t|
     t.string   "viewer_id"
@@ -27,6 +21,7 @@ ActiveRecord::Schema.define(version: 20161017153308) do
     t.string   "author_id",                null: false
     t.datetime "created_at", precision: 4, null: false
     t.index ["author_id", "post_id", "created_at"], name: "index_impressions_on_author_id_and_post_id_and_created_at", unique: true, using: :btree
+    t.index ["created_at"], name: "index_impressions_brin_on_created_at", using: :brin
   end
 
 end
