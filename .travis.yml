@@ -6,7 +6,7 @@ services:
 - postgresql
 - redis
 addons:
-  postgresql: '9.4'
+  postgresql: '9.5'
 script:
 - RAILS_ENV=test rake db:setup spec
 notifications:
