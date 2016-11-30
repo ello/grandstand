@@ -1,7 +1,7 @@
 <img src="http://d324imu86q1bqn.cloudfront.net/uploads/user/avatar/641/large_Ello.1000x1000.png" width="200px" height="200px" />
 
 # Grandstand
-Service for efficiently counting impressions
+Service for warehousing impressions
 
 [![Build Status](https://travis-ci.org/ello/grandstand.svg?branch=master)](https://travis-ci.org/ello/grandstand)
 
@@ -39,16 +39,16 @@ From the analytics side, the primary limitation is cost, as each individual view
 
 ### New State
 
-- Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
-- Store impressions in a local database
+We want to maintain certain advantages of the current design while addressing some of its shortcomings. Specifically:
 
-In the future:
-- Aggregate counts by dimensions of day, author, user, and post in fast storage
-- Potentially checkpoint counts by date/time of last processed event (not sure
-  if this is necessary for transition or not)
-- Provide an API for the same, including multi-GETing for efficient retrieval:
-  - GET /v1/users/:ids  # Aggregate view count across all of individual user's posts. Multi-get for multiple IDs
-  - GET /v1/posts/:ids  # View count for an individual post. Multi-get for multiple IDs.
+- We want to maintain near-realtime updates for the post view counters on the API (though actual realtime is not required)
+- We want to preserve the raw event data for arbitrary after-the-fact analyses
+
+Therefore, the new architecture consists of a few components:
+
+- Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
+- Store raw impressions in a local database (which is what this project handles)
+- Aggregate counts by dimensions of author/user, and stash them in fast storage (which is handled by [a Spark job](https://github.com/ello/spark-jobs)
 
 ## Quickstart
 
