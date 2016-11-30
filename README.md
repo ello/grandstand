@@ -30,7 +30,7 @@ The analysis path keeps track of the views by sending them through Segment and o
 
 #### Limitations
 
-From the display side, since the post-level view counter is a simple scalar value, it cannot be decomposed and analyzed on multiple dimensions (e.g. how many views has a particular user made, how frequently is a post viewed over time, etc.). Due to the nature of Redis's counters, querying counters across multiple posts can be costly, especially when aggregating large numbers of posts (since `MGET` is a [O(N) operation](http://redis.io/commands/mget).
+From the display side, since the post-level view counter is a simple scalar value, it cannot be decomposed and analyzed on multiple dimensions (e.g. how many views has a particular user made, how frequently is a post viewed over time, etc.). Due to the nature of Redis's counters, querying counters across multiple posts can be costly, especially when aggregating large numbers of posts (since `MGET` is a [O(N) operation](http://redis.io/commands/mget)).
 
 In addition, keeping that many discrete counters in a single Redis instance is starting to become something of a bottleneck for us. While each counter is comparatively small, it exists for every single post/comment, which is a (not huge but not trivial) storage load.
 
@@ -48,7 +48,7 @@ Therefore, the new architecture consists of a few components:
 
 - Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
 - Store raw impressions in a local database (which is what this project handles)
-- Aggregate counts by dimensions of author/user, and stash them in fast storage (which is handled by [a Spark job](https://github.com/ello/spark-jobs)
+- Aggregate counts by dimensions of author/user, and stash them in fast storage (which is handled by [a Spark job](https://github.com/ello/spark-jobs))
 
 ## Quickstart
 
