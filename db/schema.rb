@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208001535) do
+ActiveRecord::Schema.define(version: 20161208200518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,5 +39,25 @@ ActiveRecord::Schema.define(version: 20161208001535) do
   SQL
 
   add_index "impressions_by_days", ["day"], name: "index_impressions_by_days_on_day", unique: true, using: :btree
+
+  create_view :impressions_by_post_by_days, materialized: true,  sql_definition: <<-SQL
+      SELECT date_trunc('day'::text, impressions.created_at) AS day,
+      impressions.post_id,
+      count(1) AS ct
+     FROM impressions
+    GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.post_id;
+  SQL
+
+  add_index "impressions_by_post_by_days", ["post_id", "day"], name: "index_impressions_by_post_by_days_on_post_id_and_day", unique: true, using: :btree
+
+  create_view :impressions_by_author_by_days, materialized: true,  sql_definition: <<-SQL
+      SELECT date_trunc('day'::text, impressions.created_at) AS day,
+      impressions.author_id,
+      count(1) AS ct
+     FROM impressions
+    GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.author_id;
+  SQL
+
+  add_index "impressions_by_author_by_days", ["author_id", "day"], name: "index_impressions_by_author_by_days_on_author_id_and_day", unique: true, using: :btree
 
 end
