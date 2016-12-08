@@ -48,7 +48,8 @@ Therefore, the new architecture consists of a few components:
 
 - Stream raw event data for post impressions via Kinesis from the Mothership (our main Rails app)
 - Store raw impressions in a local database (which is what this project handles)
-- Aggregate counts by dimensions of author/user, and stash them in fast storage (which is handled by [a Spark job](https://github.com/ello/spark-jobs))
+- Aggregate counts in realtime by dimensions of author/user, and stash them in fast storage (which is handled by [a Spark job](https://github.com/ello/spark-jobs))
+- Aggregate counts in batch-time by dimensions of date for reporting purposes (handled via Postgres materialized views)
 
 ## Quickstart
 
@@ -66,13 +67,10 @@ standard:
 The app is pre-packaged for deployment on Heroku, so it should work to fork and
 re-push to your own Heroku remote after you create an app. A couple of caveats:
 
-- You'll need to provision a Redis instance as
-  [kinesis-stream-reader](https://github.com/ello/kinesis-stream-reader) assumes
-  that one will be available to store its local state.
-- You'll need an appropriately-sized Postgres DB addon (though a basic one
-  should be there for you by default)
-- You'll need to specify the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
-  `AWS_REGION`, and `KINESIS_STREAM_NAME` environment variables
+- You'll need to provision a Redis instance as [kinesis-stream-reader](https://github.com/ello/kinesis-stream-reader) assumes that one will be available to store its local state.
+- You'll need an appropriately-sized Postgres DB addon (though a basic one should be there for you by default)
+- You'll need to specify the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, and `KINESIS_STREAM_NAME` environment variables
+- You'll need to run the `views:refresh` Rake task periodically via Heroku Scheduler (or similar) to get the reporting views refreshed for efficient queries.
 
 ## License
 This project is released under the [MIT License](blob/master/LICENSE.txt)
