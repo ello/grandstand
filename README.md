@@ -62,6 +62,8 @@ standard:
 * Run `bundle install` and `bundle exec rake db:setup`
 * Run the test suite with `bundle exec rake`
 
+To get [pg_partman](https://github.com/keithf4/pg_partman) up and going, you'll need to run `rake db:partman:compile` before attempting to migrate. Note that if you're using [Postgres.app](https://postgresapp.com/), you'll need to modify your PATH per [these instructions](https://postgresapp.com/documentation/cli-tools.html) to ensure that the extension is compiled to the correct location.
+
 ##### Deployment, Operations, and Gotchas
 
 The app is pre-packaged for deployment on Heroku, so it should work to fork and
@@ -70,6 +72,7 @@ re-push to your own Heroku remote after you create an app. A couple of caveats:
 - You'll need to provision a Redis instance as [kinesis-stream-reader](https://github.com/ello/kinesis-stream-reader) assumes that one will be available to store its local state.
 - You'll need an appropriately-sized Postgres DB addon (though a basic one should be there for you by default)
 - You'll need to specify the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, and `KINESIS_STREAM_NAME` environment variables
+- You'll need to run the `db:partman:run_maintenance` Rake task periodically via Heroku Scheduler (or similar) to get `pg_partman` to create its daily partitions.
 - You'll need to run the `views:refresh` Rake task periodically via Heroku Scheduler (or similar) to get the reporting views refreshed for efficient queries.
 
 ## License

@@ -6,11 +6,15 @@ services:
 - postgresql
 - redis
 addons:
-  postgresql: '9.5'
+  postgresql: '9.6'
 before_script:
 - bundle exec danger
+- sudo apt-get install postgresql-server-dev-all postgresql-common
+- curl -L -O https://github.com/keithf4/pg_partman/archive/v2.6.2.tar.gz
+- tar -zxvf v2.6.2.tar.gz
+- cd pg_partman-2.6.2 && sudo make NO_BGW=1 install
 script:
-- RAILS_ENV=test rake db:setup spec
+  - RAILS_ENV=test rake db:setup spec
 notifications:
   email: false
   slack:
