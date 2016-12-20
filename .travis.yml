@@ -6,7 +6,7 @@ services:
 - postgresql
 - redis
 addons:
-  postgresql: '9.5'
+  postgresql: '9.6'
 before_script:
 - bundle exec danger
 - sudo apt-get install postgresql-server-dev-all postgresql-common
