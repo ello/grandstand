@@ -126,19 +126,6 @@ CREATE TABLE impressions (
 
 
 --
--- Name: impressions_by_author_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW impressions_by_author_by_days AS
- SELECT date_trunc('day'::text, impressions.created_at) AS day,
-    impressions.author_id,
-    count(1) AS ct
-   FROM impressions
-  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.author_id
-  WITH NO DATA;
-
-
---
 -- Name: impressions_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -147,19 +134,6 @@ CREATE MATERIALIZED VIEW impressions_by_days AS
     count(1) AS ct
    FROM impressions
   GROUP BY (date_trunc('day'::text, impressions.created_at))
-  WITH NO DATA;
-
-
---
--- Name: impressions_by_post_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW impressions_by_post_by_days AS
- SELECT date_trunc('day'::text, impressions.created_at) AS day,
-    impressions.post_id,
-    count(1) AS ct
-   FROM impressions
-  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.post_id
   WITH NO DATA;
 
 
@@ -378,24 +352,10 @@ CREATE UNIQUE INDEX impressions_p2016_12_24_created_at_author_id_post_id_idx ON 
 
 
 --
--- Name: index_impressions_by_author_by_days_on_author_id_and_day; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_impressions_by_author_by_days_on_author_id_and_day ON impressions_by_author_by_days USING btree (author_id, day);
-
-
---
 -- Name: index_impressions_by_days_on_day; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_impressions_by_days_on_day ON impressions_by_days USING btree (day);
-
-
---
--- Name: index_impressions_by_post_by_days_on_post_id_and_day; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_impressions_by_post_by_days_on_post_id_and_day ON impressions_by_post_by_days USING btree (post_id, day);
 
 
 --
@@ -418,6 +378,6 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502');
+INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101');
 
 
