@@ -7,6 +7,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       { 'author'    => { 'id' => '1' },
         'post'      => { 'id' => '10' },
         'viewer'    => { 'id' => '2' },
+        'stream'    => 'recent',
         'viewed_at' => Time.now.to_f }
     end
 
@@ -17,6 +18,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.author_id).to eq('1')
       expect(last_impression.post_id).to eq('10')
       expect(last_impression.viewer_id).to eq('2')
+      expect(last_impression.stream).to eq('recent')
       expect(last_impression.created_at).to eq(Time.now)
     end
 
@@ -32,6 +34,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
     let(:record) do
       { 'author'    => { 'id' => '1' },
         'post'      => { 'id' => '10' },
+        'stream'    => 'recent',
         'viewed_at' => Time.now.to_f }
     end
 
@@ -42,6 +45,25 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.author_id).to eq('1')
       expect(last_impression.post_id).to eq('10')
       expect(last_impression.viewer_id).to be_nil
+      expect(last_impression.stream).to eq('recent')
+      expect(last_impression.created_at).to eq(Time.now)
+    end
+  end
+
+  describe 'with a record that has no stream' do
+    let(:record) do
+      { 'author'    => { 'id' => '1' },
+        'post'      => { 'id' => '10' },
+        'viewed_at' => Time.now.to_f }
+    end
+
+    it 'stores an impression model' do
+      described_class.call(kind: 'post_was_viewed', record:  record)
+      expect(Impression.count).to eq(1)
+      last_impression = Impression.first
+      expect(last_impression.author_id).to eq('1')
+      expect(last_impression.post_id).to eq('10')
+      expect(last_impression.stream).to be_nil
       expect(last_impression.created_at).to eq(Time.now)
     end
   end

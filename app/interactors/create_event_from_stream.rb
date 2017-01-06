@@ -16,6 +16,7 @@ class CreateEventFromStream
         Impression.create!(author_id: record.dig('author', 'id'),
                           viewer_id: record.dig('viewer', 'id'),
                           post_id: record.dig('post', 'id'),
+                          stream: record['stream'],
                           created_at: Time.at(record['viewed_at']))
       end
     rescue ActiveRecord::RecordNotUnique => e
