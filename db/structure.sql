@@ -65,24 +65,24 @@ CREATE FUNCTION impressions_part_trig_func() RETURNS trigger
         BEGIN 
         IF TG_OP = 'INSERT' THEN 
             v_partition_timestamp := date_trunc('day', NEW.created_at);
-            IF NEW.created_at >= '2016-12-20 00:00:00+00' AND NEW.created_at < '2016-12-21 00:00:00+00' THEN 
-            INSERT INTO public.impressions_p2016_12_20 VALUES (NEW.*) ; 
-            ELSIF NEW.created_at >= '2016-12-19 00:00:00+00' AND NEW.created_at < '2016-12-20 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_19 VALUES (NEW.*) ; 
-            ELSIF NEW.created_at >= '2016-12-21 00:00:00+00' AND NEW.created_at < '2016-12-22 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_21 VALUES (NEW.*) ;
-            ELSIF NEW.created_at >= '2016-12-18 00:00:00+00' AND NEW.created_at < '2016-12-19 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_18 VALUES (NEW.*) ; 
-            ELSIF NEW.created_at >= '2016-12-22 00:00:00+00' AND NEW.created_at < '2016-12-23 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_22 VALUES (NEW.*) ;
-            ELSIF NEW.created_at >= '2016-12-17 00:00:00+00' AND NEW.created_at < '2016-12-18 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_17 VALUES (NEW.*) ; 
-            ELSIF NEW.created_at >= '2016-12-23 00:00:00+00' AND NEW.created_at < '2016-12-24 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_23 VALUES (NEW.*) ;
-            ELSIF NEW.created_at >= '2016-12-16 00:00:00+00' AND NEW.created_at < '2016-12-17 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_16 VALUES (NEW.*) ; 
-            ELSIF NEW.created_at >= '2016-12-24 00:00:00+00' AND NEW.created_at < '2016-12-25 00:00:00+00' THEN 
-                INSERT INTO public.impressions_p2016_12_24 VALUES (NEW.*) ;
+            IF NEW.created_at >= '2017-01-18 00:00:00+00' AND NEW.created_at < '2017-01-19 00:00:00+00' THEN 
+            INSERT INTO public.impressions_p2017_01_18 VALUES (NEW.*) ; 
+            ELSIF NEW.created_at >= '2017-01-17 00:00:00+00' AND NEW.created_at < '2017-01-18 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_17 VALUES (NEW.*) ; 
+            ELSIF NEW.created_at >= '2017-01-19 00:00:00+00' AND NEW.created_at < '2017-01-20 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_19 VALUES (NEW.*) ;
+            ELSIF NEW.created_at >= '2017-01-16 00:00:00+00' AND NEW.created_at < '2017-01-17 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_16 VALUES (NEW.*) ; 
+            ELSIF NEW.created_at >= '2017-01-20 00:00:00+00' AND NEW.created_at < '2017-01-21 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_20 VALUES (NEW.*) ;
+            ELSIF NEW.created_at >= '2017-01-15 00:00:00+00' AND NEW.created_at < '2017-01-16 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_15 VALUES (NEW.*) ; 
+            ELSIF NEW.created_at >= '2017-01-21 00:00:00+00' AND NEW.created_at < '2017-01-22 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_21 VALUES (NEW.*) ;
+            ELSIF NEW.created_at >= '2017-01-14 00:00:00+00' AND NEW.created_at < '2017-01-15 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_14 VALUES (NEW.*) ; 
+            ELSIF NEW.created_at >= '2017-01-22 00:00:00+00' AND NEW.created_at < '2017-01-23 00:00:00+00' THEN 
+                INSERT INTO public.impressions_p2017_01_22 VALUES (NEW.*) ;
             ELSE
                 v_partition_name := partman.check_name_length('impressions', to_char(v_partition_timestamp, 'YYYY_MM_DD'), TRUE);
                 SELECT count(*) INTO v_count FROM pg_catalog.pg_tables WHERE schemaname = 'public'::name AND tablename = v_partition_name::name;
@@ -122,7 +122,8 @@ CREATE TABLE impressions (
     post_id character varying NOT NULL,
     author_id character varying NOT NULL,
     created_at timestamp(4) without time zone NOT NULL,
-    stream character varying
+    stream_kind character varying,
+    stream_id character varying
 );
 
 
@@ -144,135 +145,135 @@ CREATE MATERIALIZED VIEW impressions_by_days AS
 
 CREATE MATERIALIZED VIEW impressions_by_stream_by_day AS
  SELECT date_trunc('day'::text, impressions.created_at) AS day,
-    impressions.stream,
+    impressions.stream_kind,
     count(1) AS ct
    FROM impressions
-  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.stream
+  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.stream_kind
   WITH NO DATA;
 
 
 --
--- Name: impressions_p2016_12_16; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_14; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_16 (
+CREATE TABLE impressions_p2017_01_14 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_16_partition_check CHECK (((created_at >= '2016-12-16 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-17 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_14_partition_check CHECK (((created_at >= '2017-01-14 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-15 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_17; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_15; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_17 (
+CREATE TABLE impressions_p2017_01_15 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_17_partition_check CHECK (((created_at >= '2016-12-17 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-18 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_15_partition_check CHECK (((created_at >= '2017-01-15 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-16 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_18; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_16; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_18 (
+CREATE TABLE impressions_p2017_01_16 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_18_partition_check CHECK (((created_at >= '2016-12-18 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-19 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_16_partition_check CHECK (((created_at >= '2017-01-16 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-17 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_19; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_17; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_19 (
+CREATE TABLE impressions_p2017_01_17 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_19_partition_check CHECK (((created_at >= '2016-12-19 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-20 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_17_partition_check CHECK (((created_at >= '2017-01-17 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-18 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_20; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_18; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_20 (
+CREATE TABLE impressions_p2017_01_18 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_20_partition_check CHECK (((created_at >= '2016-12-20 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-21 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_18_partition_check CHECK (((created_at >= '2017-01-18 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-19 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_21; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_19; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_21 (
+CREATE TABLE impressions_p2017_01_19 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_21_partition_check CHECK (((created_at >= '2016-12-21 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-22 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_19_partition_check CHECK (((created_at >= '2017-01-19 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-20 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_22; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_20; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_22 (
+CREATE TABLE impressions_p2017_01_20 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_22_partition_check CHECK (((created_at >= '2016-12-22 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-23 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_20_partition_check CHECK (((created_at >= '2017-01-20 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-21 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_23; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_21; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_23 (
+CREATE TABLE impressions_p2017_01_21 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_23_partition_check CHECK (((created_at >= '2016-12-23 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-24 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_21_partition_check CHECK (((created_at >= '2017-01-21 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-22 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
 
 --
--- Name: impressions_p2016_12_24; Type: TABLE; Schema: public; Owner: -
+-- Name: impressions_p2017_01_22; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE impressions_p2016_12_24 (
+CREATE TABLE impressions_p2017_01_22 (
     viewer_id character varying,
     post_id character varying,
     author_id character varying,
     created_at timestamp(4) without time zone,
-    CONSTRAINT impressions_p2016_12_24_partition_check CHECK (((created_at >= '2016-12-24 00:00:00'::timestamp without time zone) AND (created_at < '2016-12-25 00:00:00'::timestamp without time zone)))
+    CONSTRAINT impressions_p2017_01_22_partition_check CHECK (((created_at >= '2017-01-22 00:00:00'::timestamp without time zone) AND (created_at < '2017-01-23 00:00:00'::timestamp without time zone)))
 )
 INHERITS (impressions);
 
@@ -303,66 +304,66 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
--- Name: impressions_p2016_12_16_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: impressions_p2017_01_14_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX impressions_p2016_12_16_created_at_author_id_post_id_idx ON impressions_p2016_12_16 USING btree (created_at, author_id, post_id);
-
-
---
--- Name: impressions_p2016_12_17_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX impressions_p2016_12_17_created_at_author_id_post_id_idx ON impressions_p2016_12_17 USING btree (created_at, author_id, post_id);
+CREATE UNIQUE INDEX impressions_p2017_01_14_created_at_author_id_post_id_idx ON impressions_p2017_01_14 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2016_12_18_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: impressions_p2017_01_15_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX impressions_p2016_12_18_created_at_author_id_post_id_idx ON impressions_p2016_12_18 USING btree (created_at, author_id, post_id);
-
-
---
--- Name: impressions_p2016_12_19_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX impressions_p2016_12_19_created_at_author_id_post_id_idx ON impressions_p2016_12_19 USING btree (created_at, author_id, post_id);
+CREATE UNIQUE INDEX impressions_p2017_01_15_created_at_author_id_post_id_idx ON impressions_p2017_01_15 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2016_12_20_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: impressions_p2017_01_16_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX impressions_p2016_12_20_created_at_author_id_post_id_idx ON impressions_p2016_12_20 USING btree (created_at, author_id, post_id);
-
-
---
--- Name: impressions_p2016_12_21_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX impressions_p2016_12_21_created_at_author_id_post_id_idx ON impressions_p2016_12_21 USING btree (created_at, author_id, post_id);
+CREATE UNIQUE INDEX impressions_p2017_01_16_created_at_author_id_post_id_idx ON impressions_p2017_01_16 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2016_12_22_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: impressions_p2017_01_17_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX impressions_p2016_12_22_created_at_author_id_post_id_idx ON impressions_p2016_12_22 USING btree (created_at, author_id, post_id);
-
-
---
--- Name: impressions_p2016_12_23_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX impressions_p2016_12_23_created_at_author_id_post_id_idx ON impressions_p2016_12_23 USING btree (created_at, author_id, post_id);
+CREATE UNIQUE INDEX impressions_p2017_01_17_created_at_author_id_post_id_idx ON impressions_p2017_01_17 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2016_12_24_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: impressions_p2017_01_18_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX impressions_p2016_12_24_created_at_author_id_post_id_idx ON impressions_p2016_12_24 USING btree (created_at, author_id, post_id);
+CREATE UNIQUE INDEX impressions_p2017_01_18_created_at_author_id_post_id_idx ON impressions_p2017_01_18 USING btree (created_at, author_id, post_id);
+
+
+--
+-- Name: impressions_p2017_01_19_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX impressions_p2017_01_19_created_at_author_id_post_id_idx ON impressions_p2017_01_19 USING btree (created_at, author_id, post_id);
+
+
+--
+-- Name: impressions_p2017_01_20_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX impressions_p2017_01_20_created_at_author_id_post_id_idx ON impressions_p2017_01_20 USING btree (created_at, author_id, post_id);
+
+
+--
+-- Name: impressions_p2017_01_21_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX impressions_p2017_01_21_created_at_author_id_post_id_idx ON impressions_p2017_01_21 USING btree (created_at, author_id, post_id);
+
+
+--
+-- Name: impressions_p2017_01_22_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX impressions_p2017_01_22_created_at_author_id_post_id_idx ON impressions_p2017_01_22 USING btree (created_at, author_id, post_id);
 
 
 --
@@ -373,10 +374,10 @@ CREATE UNIQUE INDEX index_impressions_by_days_on_day ON impressions_by_days USIN
 
 
 --
--- Name: index_impressions_by_stream_by_day_on_stream_and_day; Type: INDEX; Schema: public; Owner: -
+-- Name: index_impressions_by_stream_by_day_on_stream_kind_and_day; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_impressions_by_stream_by_day_on_stream_and_day ON impressions_by_stream_by_day USING btree (stream, day);
+CREATE UNIQUE INDEX index_impressions_by_stream_by_day_on_stream_kind_and_day ON impressions_by_stream_by_day USING btree (stream_kind, day);
 
 
 --
@@ -399,6 +400,6 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425');
+INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716');
 
 
