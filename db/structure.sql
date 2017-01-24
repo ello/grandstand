@@ -2,12 +2,17 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: partman; Type: SCHEMA; Schema: -; Owner: -
@@ -28,6 +33,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: pg_partman; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_partman WITH SCHEMA partman;
+
+
+--
+-- Name: EXTENSION pg_partman; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_partman IS 'Extension to manage partitioned tables by time or ID';
 
 
 SET search_path = public, pg_catalog;
@@ -83,7 +102,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE ar_internal_metadata (
@@ -95,7 +114,7 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: impressions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions (
@@ -109,7 +128,7 @@ CREATE TABLE impressions (
 
 
 --
--- Name: impressions_by_category_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_by_category_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW impressions_by_category_by_days AS
@@ -118,24 +137,24 @@ CREATE MATERIALIZED VIEW impressions_by_category_by_days AS
     count(1) AS ct
    FROM impressions
   WHERE ((impressions.stream_kind)::text = 'category'::text)
-  GROUP BY date_trunc('day'::text, impressions.created_at), impressions.stream_id
+  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.stream_id
   WITH NO DATA;
 
 
 --
--- Name: impressions_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW impressions_by_days AS
  SELECT date_trunc('day'::text, impressions.created_at) AS day,
     count(1) AS ct
    FROM impressions
-  GROUP BY date_trunc('day'::text, impressions.created_at)
+  GROUP BY (date_trunc('day'::text, impressions.created_at))
   WITH NO DATA;
 
 
 --
--- Name: impressions_by_stream_by_day; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_by_stream_by_day; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW impressions_by_stream_by_day AS
@@ -143,12 +162,12 @@ CREATE MATERIALIZED VIEW impressions_by_stream_by_day AS
     impressions.stream_kind,
     count(1) AS ct
    FROM impressions
-  GROUP BY date_trunc('day'::text, impressions.created_at), impressions.stream_kind
+  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.stream_kind
   WITH NO DATA;
 
 
 --
--- Name: impressions_p2017_01_14; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_14; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_14 (
@@ -162,7 +181,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_15; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_15; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_15 (
@@ -176,7 +195,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_16; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_16; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_16 (
@@ -190,7 +209,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_17; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_17; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_17 (
@@ -204,7 +223,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_18; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_18; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_18 (
@@ -218,7 +237,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_19; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_19; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_19 (
@@ -232,7 +251,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_20; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_20; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_20 (
@@ -246,7 +265,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_21; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_21; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_21 (
@@ -260,7 +279,7 @@ INHERITS (impressions);
 
 
 --
--- Name: impressions_p2017_01_22; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_22; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE impressions_p2017_01_22 (
@@ -274,7 +293,7 @@ INHERITS (impressions);
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
@@ -283,7 +302,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ar_internal_metadata
@@ -291,7 +310,7 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY schema_migrations
@@ -299,98 +318,98 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
--- Name: impressions_p2017_01_14_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_14_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_14_created_at_author_id_post_id_idx ON impressions_p2017_01_14 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_15_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_15_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_15_created_at_author_id_post_id_idx ON impressions_p2017_01_15 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_16_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_16_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_16_created_at_author_id_post_id_idx ON impressions_p2017_01_16 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_17_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_17_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_17_created_at_author_id_post_id_idx ON impressions_p2017_01_17 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_18_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_18_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_18_created_at_author_id_post_id_idx ON impressions_p2017_01_18 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_19_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_19_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_19_created_at_author_id_post_id_idx ON impressions_p2017_01_19 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_20_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_20_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_20_created_at_author_id_post_id_idx ON impressions_p2017_01_20 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_21_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_21_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_21_created_at_author_id_post_id_idx ON impressions_p2017_01_21 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_p2017_01_22_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: impressions_p2017_01_22_created_at_author_id_post_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX impressions_p2017_01_22_created_at_author_id_post_id_idx ON impressions_p2017_01_22 USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: index_impressions_by_category_by_days_on_category_and_day; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_impressions_by_category_by_days_on_category_and_day; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_impressions_by_category_by_days_on_category_and_day ON impressions_by_category_by_days USING btree (category, day);
 
 
 --
--- Name: index_impressions_by_days_on_day; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_impressions_by_days_on_day; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_impressions_by_days_on_day ON impressions_by_days USING btree (day);
 
 
 --
--- Name: index_impressions_by_stream_by_day_on_stream_kind_and_day; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_impressions_by_stream_by_day_on_stream_kind_and_day; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_impressions_by_stream_by_day_on_stream_kind_and_day ON impressions_by_stream_by_day USING btree (stream_kind, day);
 
 
 --
--- Name: index_impressions_on_created_at_and_author_id_and_post_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_impressions_on_created_at_and_author_id_and_post_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_impressions_on_created_at_and_author_id_and_post_id ON impressions USING btree (created_at, author_id, post_id);
 
 
 --
--- Name: impressions_part_trig; Type: TRIGGER; Schema: public; Owner: -
+-- Name: impressions impressions_part_trig; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW EXECUTE PROCEDURE impressions_part_trig_func();
@@ -400,7 +419,7 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716'), ('20170119233648');
 
