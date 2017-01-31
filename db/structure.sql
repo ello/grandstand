@@ -154,6 +154,20 @@ CREATE MATERIALIZED VIEW impressions_by_days AS
 
 
 --
+-- Name: impressions_by_email_by_days; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW impressions_by_email_by_days AS
+ SELECT date_trunc('day'::text, impressions.created_at) AS day,
+    impressions.stream_id AS email,
+    count(1) AS ct
+   FROM impressions
+  WHERE ((impressions.stream_kind)::text = 'email'::text)
+  GROUP BY (date_trunc('day'::text, impressions.created_at)), impressions.stream_id
+  WITH NO DATA;
+
+
+--
 -- Name: impressions_by_stream_by_day; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -395,6 +409,13 @@ CREATE UNIQUE INDEX index_impressions_by_days_on_day ON impressions_by_days USIN
 
 
 --
+-- Name: index_impressions_by_email_by_days_on_email_and_day; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_impressions_by_email_by_days_on_email_and_day ON impressions_by_email_by_days USING btree (email, day);
+
+
+--
 -- Name: index_impressions_by_stream_by_day_on_stream_kind_and_day; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -421,6 +442,6 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716'), ('20170119233648');
+INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716'), ('20170119233648'), ('20170130163030');
 
 
