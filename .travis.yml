@@ -14,8 +14,8 @@ before_script:
 - tar -zxvf v2.6.2.tar.gz
 - cd pg_partman-2.6.2 && sudo make NO_BGW=1 install
 script:
-  - rake aggregation:db:test:prepare
-  - RAILS_ENV=test rake db:setup spec
+  - rake db:test:prepare_all
+  - RAILS_ENV=test rake spec
 notifications:
   email: false
   slack:
