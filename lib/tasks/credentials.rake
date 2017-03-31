@@ -22,5 +22,6 @@ namespace :credentials do
           COMMIT;"
 
     ActiveRecord::Base.connection.execute(sql)
+    AggregationRecord.connection.execute(sql)
   end
 end
