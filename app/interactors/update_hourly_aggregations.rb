@@ -17,6 +17,7 @@ class UpdateHourlyAggregations
 
     track_category_views(start, query)
     track_stream_views(start, query)
+    track_unknown_views(start, query)
   end
 
   # Stream_id matters in category views
@@ -60,8 +61,6 @@ class UpdateHourlyAggregations
     end
   end
 
-
-
   def stream_views(query)
     query.
       where.not(stream_kind: 'category').
@@ -70,6 +69,34 @@ class UpdateHourlyAggregations
       each_with_object({}) do |(k, count), views|
         stream_kind = k[0]
         logged_in   = k[1]
+        views[stream_kind] ||= {}
+        if logged_in
+          views[stream_kind][:logged_in_views] = count
+        else
+          views[stream_kind][:logged_out_views] = count
+        end
+      end
+  end
+
+  def track_unknown_views(start, query)
+    unknown_views(query).each do |stream_kind, counts|
+      HourlyImpression.create_or_update(
+        starting_at:      start,
+        stream_kind:      stream_kind,
+        logged_in_views:  counts[:logged_in_views],
+        logged_out_views: counts[:logged_out_views],
+      )
+    end
+  end
+
+  def unknown_views(query)
+    query.
+      where(stream_kind: nil).
+      group('viewer_id IS NOT NULL').
+      count.
+      each_with_object({}) do |(k, count), views|
+        logged_in   = k
+        stream_kind = 'unknown'
         views[stream_kind] ||= {}
         if logged_in
           views[stream_kind][:logged_in_views] = count
