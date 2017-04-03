@@ -137,4 +137,22 @@ RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
     expect(HourlyImpression.count).to eq(2)
   end
 
+  it 'includes impressions not tagged with a stream kind' do
+    Impression.create(
+      created_at: DateTime.new(2017, 1, 1, 13, 00, 00),
+      author_id: 0,
+      post_id: 0,
+      viewer_id: 1,
+    )
+    Impression.create(
+      created_at: DateTime.new(2017, 1, 1, 13, 59, 59),
+      author_id: 0,
+      post_id: 1,
+      viewer_id: 2,
+    )
+    described_class.call(date: Date.new(2017, 1, 1))
+    expect(HourlyImpression.count).to eq(1)
+    no_stream = HourlyImpression.last
+  end
+
 end
