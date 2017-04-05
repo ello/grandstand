@@ -8,7 +8,7 @@ namespace :credentials do
     ActiveRecord::Base.connection.execute(sql)
   end
 
-  task :update_aggragate, [:host, :dbname, :user, :password] => :environment do |t, args|
+  task :update_aggregate, [:host, :dbname, :user, :password] => :environment do |t, args|
     sql = fdw_connect_sql(args)
     AggregationRecord.connection.execute(sql)
   end

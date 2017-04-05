@@ -47,6 +47,37 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: email_active_user_rollups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE email_active_user_rollups (
+    id integer NOT NULL,
+    day timestamp without time zone,
+    day_total integer,
+    thirty_day_total integer
+);
+
+
+--
+-- Name: email_active_user_rollups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE email_active_user_rollups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: email_active_user_rollups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE email_active_user_rollups_id_seq OWNED BY email_active_user_rollups.id;
+
+
+--
 -- Name: hourly_impressions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -89,6 +120,13 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: email_active_user_rollups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY email_active_user_rollups ALTER COLUMN id SET DEFAULT nextval('email_active_user_rollups_id_seq'::regclass);
+
+
+--
 -- Name: hourly_impressions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -101,6 +139,14 @@ ALTER TABLE ONLY hourly_impressions ALTER COLUMN id SET DEFAULT nextval('hourly_
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: email_active_user_rollups email_active_user_rollups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY email_active_user_rollups
+    ADD CONSTRAINT email_active_user_rollups_pkey PRIMARY KEY (id);
 
 
 --
@@ -127,11 +173,18 @@ CREATE UNIQUE INDEX hourly_impressions_full_index ON hourly_impressions USING bt
 
 
 --
+-- Name: index_email_active_user_rollups_on_day; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_email_active_user_rollups_on_day ON email_active_user_rollups USING btree (day);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20170330144935');
+INSERT INTO schema_migrations (version) VALUES ('20170330144935'), ('20170404191344');
 
 
