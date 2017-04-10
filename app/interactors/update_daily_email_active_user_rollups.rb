@@ -3,10 +3,10 @@ class UpdateDailyEmailActiveUserRollups
   include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
 
   def call
-    EmailActiveUserRollup.find_or_create_by(day: context.date) do |mau|
-      mau.day_total        = day_total
-      mau.thirty_day_total = rolling_total
-    end
+    mau = EmailActiveUserRollup.where(day: context.date).first_or_initialize
+    mau.day_total        = day_total
+    mau.thirty_day_total = rolling_total
+    mau.save
   end
 
   private
