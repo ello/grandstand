@@ -3,11 +3,18 @@ class AggregatedUser
   class << self
     def add(id, username)
       redis.hset(key, username, id)
+      new(id, username)
     end
 
     def all
       redis.hgetall(key).map do |resp|
         new(resp[1].to_i, resp[0])
+      end
+    end
+
+    def get(username)
+      if id = redis.hget(key, username)
+        new(id.to_i, username)
       end
     end
 
