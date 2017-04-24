@@ -120,6 +120,37 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: user_hourly_impressions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE user_hourly_impressions (
+    id integer NOT NULL,
+    author_id character varying NOT NULL,
+    starting_at timestamp without time zone NOT NULL,
+    views integer NOT NULL
+);
+
+
+--
+-- Name: user_hourly_impressions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE user_hourly_impressions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_hourly_impressions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE user_hourly_impressions_id_seq OWNED BY user_hourly_impressions.id;
+
+
+--
 -- Name: email_active_user_rollups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -131,6 +162,13 @@ ALTER TABLE ONLY email_active_user_rollups ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY hourly_impressions ALTER COLUMN id SET DEFAULT nextval('hourly_impressions_id_seq'::regclass);
+
+
+--
+-- Name: user_hourly_impressions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY user_hourly_impressions ALTER COLUMN id SET DEFAULT nextval('user_hourly_impressions_id_seq'::regclass);
 
 
 --
@@ -166,6 +204,14 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
+-- Name: user_hourly_impressions user_hourly_impressions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY user_hourly_impressions
+    ADD CONSTRAINT user_hourly_impressions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: hourly_impressions_full_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -180,11 +226,18 @@ CREATE UNIQUE INDEX index_email_active_user_rollups_on_day ON email_active_user_
 
 
 --
+-- Name: user_hourly_impressions_full_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_hourly_impressions_full_index ON user_hourly_impressions USING btree (author_id, starting_at);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20170330144935'), ('20170404191344');
+INSERT INTO schema_migrations (version) VALUES ('20170330144935'), ('20170404191344'), ('20170421184054');
 
 

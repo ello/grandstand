@@ -6,7 +6,7 @@ class AddAggregatedUser
     user = AggregatedUser.add(context.id, context.username)
     if context.backfill
       (90.days.ago.to_date..Date.today).each do |date|
-        #UpdateUserHourlyAggregations.call(user_id: user.id, date: date)
+        UpdateUserHourlyAggregations.call(author_id: user.id, date: date)
       end
     end
   end
