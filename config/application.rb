@@ -29,5 +29,7 @@ module Grandstand
 
     # Use SQL-formatted schema dumps for Partman
     config.active_record.schema_format = :sql
+
+    config.eager_load_paths += %W(#{config.root}/lib/api_clients)
   end
 end
