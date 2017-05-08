@@ -8,7 +8,8 @@ namespace :kinesis do
     )
 
     stream.run! do |record, opts|
-      CreateEventFromStream.call(record: record, kind: opts[:schema_name])
+      CreateEventFromStream.call(record: record, kind: opts[:schema_name].underscore)
+      SendEventToS3.call(record: record, opts: opts)
     end
   end
 end
