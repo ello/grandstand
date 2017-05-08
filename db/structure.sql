@@ -49,6 +49,20 @@ CREATE EXTENSION IF NOT EXISTS pg_partman WITH SCHEMA partman;
 COMMENT ON EXTENSION pg_partman IS 'Extension to manage partitioned tables by time or ID';
 
 
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
 SET search_path = public, pg_catalog;
 
 --
@@ -123,7 +137,8 @@ CREATE TABLE impressions (
     author_id character varying NOT NULL,
     created_at timestamp(4) without time zone NOT NULL,
     stream_kind character varying,
-    stream_id character varying
+    stream_id character varying,
+    uuid uuid
 );
 
 
@@ -349,6 +364,13 @@ CREATE UNIQUE INDEX index_impressions_on_created_at_and_author_id_and_post_id ON
 
 
 --
+-- Name: index_impressions_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_impressions_on_uuid ON impressions USING btree (uuid) WHERE (uuid IS NULL);
+
+
+--
 -- Name: index_impressions_on_viewer_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -368,6 +390,6 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716'), ('20170119233648'), ('20170130163030'), ('20170221035451'), ('20170227170610'), ('20170505160548');
+INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20170103213513'), ('20170118203315'), ('20170221035451'), ('20170508174610'), ('20170508195650');
 
 
