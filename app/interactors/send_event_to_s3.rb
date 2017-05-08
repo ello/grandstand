@@ -1,14 +1,19 @@
 class SendEventToS3
   include Interactor
   include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
-  require_relative '../../lib/api_clients/s3_client'
 
-  # Save filename as UUID
-  # Upload historical data already in the impressions table
+  # ** Uploading historical data **
+  #
+  # - Create rake task that will rip through a particular time period (per day?), use Postgres'
+  # UUID function to update_all (may need to enable extension), and then store it on S3. Look into batch
+  # uploads for S3.
+  # - Be sure to replicate event format that we get from mothership (don't have to include fields that aren't in DB for user/post data, id is fine)
+
   def call
-    S3Client.upload(filename: "#{viewed_at}/#{shard_id}/#{uuid}}",
+    S3Client.upload(filename: "#{viewed_at}/#{uuid}}",
                     body:     context.record)
   end
+  add_transaction_tracer :call, category: :task
 
   private
 
@@ -17,13 +22,7 @@ class SendEventToS3
     Time.at(epoch).strftime("%Y/%m/%d")
   end
 
-  def shard_id
-    context.opts[:shard_id]
-  end
-
   def uuid
     context.record['uuid']
   end
-
-  add_transaction_tracer :call, category: :task
 end
