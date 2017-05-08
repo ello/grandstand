@@ -9,6 +9,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
         'viewer'      => { 'id' => '2' },
         'stream_kind' => 'category',
         'stream_id'   => '10',
+        'uuid'        => '2976fc02-50f1-48fb-b818-736c0ee18407',
         'viewed_at'   => Time.now.to_f }
     end
 
@@ -21,6 +22,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.viewer_id).to eq('2')
       expect(last_impression.stream_kind).to eq('category')
       expect(last_impression.stream_id).to eq('10')
+      expect(last_impression.stream_id).to eq('2976fc02-50f1-48fb-b818-736c0ee18407')
       expect(last_impression.created_at).to eq(Time.now)
     end
 
@@ -38,6 +40,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
         'post'        => { 'id' => '10' },
         'stream_kind' => 'category',
         'stream_id'   => '10',
+        'uuid'        => '2976fc02-50f1-48fb-b818-736c0ee18407',
         'viewed_at'   => Time.now.to_f }
     end
 
@@ -50,6 +53,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.viewer_id).to be_nil
       expect(last_impression.stream_kind).to eq('category')
       expect(last_impression.stream_id).to eq('10')
+      expect(last_impression.stream_id).to eq('2976fc02-50f1-48fb-b818-736c0ee18407')
       expect(last_impression.created_at).to eq(Time.now)
     end
   end

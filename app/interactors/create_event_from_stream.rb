@@ -18,6 +18,7 @@ class CreateEventFromStream
                           post_id: record.dig('post', 'id'),
                           stream_kind: record['stream_kind'],
                           stream_id: record['stream_id'],
+                          uuid: record['uuid'],
                           created_at: Time.at(record['viewed_at']))
       end
     rescue ActiveRecord::RecordNotUnique => e
