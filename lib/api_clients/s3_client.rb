@@ -2,9 +2,12 @@ require 'aws-sdk'
 
 module S3Client
   class << self
+
     def upload(filename:, body:)
       obj = s3_bucket.object(filename)
-      obj.put(body: body)
+      unless obj.exists?
+        obj.put(body: body)
+      end
     end
 
     private

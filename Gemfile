@@ -12,6 +12,8 @@ gem 'interactor-rails'
 gem 'dotenv-rails'
 gem 'newrelic_rpm'
 gem 'aws-sdk', '~> 2'
+gem 'work_queue'
+gem 'retries'
 
 group :development, :test do
   gem 'pry-rails'
