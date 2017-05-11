@@ -364,13 +364,6 @@ CREATE UNIQUE INDEX index_impressions_on_created_at_and_author_id_and_post_id ON
 
 
 --
--- Name: index_impressions_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_impressions_on_uuid ON impressions USING btree (uuid) WHERE (uuid IS NULL);
-
-
---
 -- Name: index_impressions_on_viewer_id; Type: INDEX; Schema: public; Owner: -
 --
 
