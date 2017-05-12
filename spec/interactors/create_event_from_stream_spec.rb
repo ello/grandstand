@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
 
+  before { allow(S3Client).to receive(:upload).and_return(true) }
+
   describe 'with a valid and fully-populated record' do
     let(:record) do
       { 'author'      => { 'id' => '1' },
@@ -27,7 +29,6 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
     end
 
     it 'uploads the event to s3' do
-      allow(S3Client).to receive(:upload)
       described_class.call(kind: 'post_was_viewed', record:  record)
       expect(S3Client).to have_received(:upload)
     end
