@@ -10,6 +10,11 @@ module S3Client
       end
     end
 
+    def path_for_impression(impression)
+      created_at = impression.created_at.strftime("%Y-%m-%d")
+      "created_at=#{created_at}"
+    end
+
     private
 
     def s3_bucket
