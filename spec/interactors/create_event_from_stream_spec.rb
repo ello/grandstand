@@ -26,6 +26,12 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.created_at).to eq(Time.now)
     end
 
+    it 'uploads the event to s3' do
+      allow(S3Client).to receive(:upload)
+      described_class.call(kind: 'post_was_viewed', record:  record)
+      expect(S3Client).to have_received(:upload)
+    end
+
     it 'silently drops duplicated records' do
       2.times do
         described_class.call(kind: 'post_was_viewed', record:  record)
