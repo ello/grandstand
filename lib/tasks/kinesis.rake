@@ -7,8 +7,8 @@ namespace :kinesis do
       prefix:      ENV['KINESIS_STREAM_PREFIX'] || ''
     )
 
-    stream.run! do |record, kind|
-      CreateEventFromStream.call(record: record, kind: kind.underscore)
+    stream.run! do |record, opts|
+      CreateEventFromStream.call(record: record, kind: opts[:schema_name].underscore)
     end
   end
 end
