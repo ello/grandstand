@@ -26,6 +26,7 @@ group :development do
 end
 
 group :production do
+  gem 'vault'
   gem 'rails_12factor'
   gem 'honeybadger', '~> 2.0'
 end
