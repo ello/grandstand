@@ -27,6 +27,8 @@ module Grandstand
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.paths.add 'app/interactors', eager_load: true
+
     # Use SQL-formatted schema dumps for Partman
     config.active_record.schema_format = :sql
   end
