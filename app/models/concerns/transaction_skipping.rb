@@ -5,7 +5,7 @@ module TransactionSkipping
 
   class_methods do
     def transaction(*args)
-      if @skip_transaction
+      if Thread.current[:skip_transaction]
         yield
       else
         super
@@ -14,10 +14,10 @@ module TransactionSkipping
 
     def skip_transaction
       begin
-        @skip_transaction = true
+        Thread.current[:skip_transaction] = true
         yield
       ensure
-        @skip_transaction = nil
+        Thread.current[:skip_transaction] = nil
       end
     end
   end
