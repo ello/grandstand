@@ -18,5 +18,34 @@ namespace :db do
         result = ActiveRecord::Migration.execute("SELECT partman.partition_data_time('public.impressions')")[0]['partition_data_time']
       end
     end
+
+    task :archive_partition => :environment do
+      partition_name = ENV['PARTITION_NAME'] || raise('Must specify PARTITION_NAME')
+      s3_bucket = ENV['S3_BUCKET'] || raise('Must specify S3_BUCKET')
+
+      Tempfile.create(partition_name) do |f|
+        puts "Starting copy operation..."
+        conn = ActiveRecord::Base.connection.raw_connection
+        conn.copy_data "COPY #{partition_name} TO STDOUT CSV HEADER" do
+          while row = conn.get_copy_data
+          f.puts row.force_encoding(conn.internal_encoding)
+          end
+        end
+
+        f.rewind
+
+        puts "Starting upload operation..."
+        s3 = Aws::S3::Client.new
+        resp = s3.put_object({
+          body: f,
+          bucket: s3_bucket,
+          key: "#{partition_name}.csv",
+          server_side_encryption: "AES256"
+        })
+
+        puts resp
+      end
+
+    end
   end
 end
