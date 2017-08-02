@@ -123,7 +123,8 @@ CREATE TABLE impressions (
     author_id character varying NOT NULL,
     created_at timestamp(4) without time zone NOT NULL,
     stream_kind character varying,
-    stream_id character varying
+    stream_id character varying,
+    artist_invite_id character varying
 );
 
 
@@ -368,6 +369,25 @@ CREATE TRIGGER impressions_part_trig BEFORE INSERT ON impressions FOR EACH ROW E
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20161017153308'), ('20161101113557'), ('20161208001535'), ('20161208200325'), ('20161208200518'), ('20161220042635'), ('20161220042637'), ('20161220045344'), ('20161220145823'), ('20161220154502'), ('20161220235101'), ('20170103213513'), ('20170104173425'), ('20170118203315'), ('20170118203716'), ('20170119233648'), ('20170130163030'), ('20170221035451'), ('20170227170610'), ('20170505160548');
+INSERT INTO "schema_migrations" (version) VALUES
+('20161017153308'),
+('20161101113557'),
+('20161208001535'),
+('20161208200325'),
+('20161208200518'),
+('20161220042635'),
+('20161220042637'),
+('20161220045344'),
+('20161220145823'),
+('20161220154502'),
+('20161220235101'),
+('20170103213513'),
+('20170104173425'),
+('20170118203315'),
+('20170119233648'),
+('20170130163030'),
+('20170221035451'),
+('20170227170610'),
+('20170718203305');
 
 

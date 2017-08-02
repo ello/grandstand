@@ -47,6 +47,39 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: artist_invite_hourly_impressions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE artist_invite_hourly_impressions (
+    id integer NOT NULL,
+    starting_at timestamp without time zone,
+    artist_invite_id character varying,
+    stream_kind character varying,
+    logged_in_views integer,
+    logged_out_views integer
+);
+
+
+--
+-- Name: artist_invite_hourly_impressions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE artist_invite_hourly_impressions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: artist_invite_hourly_impressions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE artist_invite_hourly_impressions_id_seq OWNED BY artist_invite_hourly_impressions.id;
+
+
+--
 -- Name: email_active_user_rollups; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -151,6 +184,13 @@ ALTER SEQUENCE user_hourly_impressions_id_seq OWNED BY user_hourly_impressions.i
 
 
 --
+-- Name: artist_invite_hourly_impressions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY artist_invite_hourly_impressions ALTER COLUMN id SET DEFAULT nextval('artist_invite_hourly_impressions_id_seq'::regclass);
+
+
+--
 -- Name: email_active_user_rollups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -177,6 +217,14 @@ ALTER TABLE ONLY user_hourly_impressions ALTER COLUMN id SET DEFAULT nextval('us
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: artist_invite_hourly_impressions artist_invite_hourly_impressions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY artist_invite_hourly_impressions
+    ADD CONSTRAINT artist_invite_hourly_impressions_pkey PRIMARY KEY (id);
 
 
 --
@@ -212,6 +260,13 @@ ALTER TABLE ONLY user_hourly_impressions
 
 
 --
+-- Name: artist_invite_hourly_impressions_full_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX artist_invite_hourly_impressions_full_index ON artist_invite_hourly_impressions USING btree (starting_at, artist_invite_id, stream_kind);
+
+
+--
 -- Name: hourly_impressions_full_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -238,6 +293,10 @@ CREATE UNIQUE INDEX user_hourly_impressions_full_index ON user_hourly_impression
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20170330144935'), ('20170404191344'), ('20170421184054');
+INSERT INTO "schema_migrations" (version) VALUES
+('20170330144935'),
+('20170404191344'),
+('20170421184054'),
+('20170719181145');
 
 
