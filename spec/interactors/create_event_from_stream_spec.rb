@@ -4,12 +4,14 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
 
   describe 'with a valid and fully-populated record' do
     let(:record) do
-      { 'author'      => { 'id' => '1' },
-        'post'        => { 'id' => '10' },
+      {
+        'author'      => { 'id' => '1' },
+        'post'        => { 'id' => '10', 'artist_invite_id' => '20' },
         'viewer'      => { 'id' => '2' },
         'stream_kind' => 'category',
         'stream_id'   => '10',
-        'viewed_at'   => Time.now.to_f }
+        'viewed_at'   => Time.now.to_f,
+      }
     end
 
     it 'stores an impression model' do
@@ -22,6 +24,7 @@ RSpec.describe CreateEventFromStream, type: :model, freeze_time: true do
       expect(last_impression.stream_kind).to eq('category')
       expect(last_impression.stream_id).to eq('10')
       expect(last_impression.created_at).to eq(Time.now)
+      expect(last_impression.artist_invite_id).to eq('20')
     end
 
     it 'silently drops duplicated records' do
