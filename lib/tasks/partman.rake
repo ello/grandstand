@@ -19,8 +19,40 @@ namespace :db do
       end
     end
 
-    task :archive_partition => :environment do
-      partition_name = ENV['PARTITION_NAME'] || raise('Must specify PARTITION_NAME')
+    task :archive_old_partitions => :environment do
+      all_partitions = ActiveRecord::Migration.execute("SELECT partman.show_partitions('public.impressions')").
+        to_a.
+        map { |r| r['show_partitions'].split(',')[1].gsub(')', '') }.
+        sort.
+        reverse.
+        limit(10) # limit to keep task run time down.
+
+      all_partitions.each do |partition_name|
+        parsed = /impressions_p(\d{4})_(\d{2})_(\d{2})/.match(partition_name)
+        partition_date = Date.new(parsed[1], parsed[2], parsed[3])
+
+        if partition_date < 180.days.ago
+          puts "Archiving #{partition_name}"
+          Rake::Task['db:partman:archive_partition'].invoke(partition_name)
+          Rake::Task['db:partman:archive_partition'].reenable
+          days_old = (Date.today - partition_date).to_i
+          puts "Removing partitions older then #{days_old} days old"
+          Rake::Task['db:partman:delete_partitions'].invoke(days_old)
+          Rake::Task['db:partman:delete_partitions'].reenable
+        end
+      end
+    end
+
+    task :delete_partitions, [:older_than] => :environment do |t, args|
+      older_than = args[:older_than].try(:to_i) || raise('Must specify older_than (in days)')
+      raise 'Partition too young to delete!' unless older_than > 180
+
+      resp = ActiveRecord::Migration.execute("SELECT partman.drop_partition_time('public.impressions', '#{older_than} days', FALSE, FALSE)")
+      puts resp[0]
+    end
+
+    task :archive_partition, [:partition_name] => :environment do |t, args|
+      partition_name = args[:partition_name] || raise('Must specify partition_name')
       s3_bucket = ENV['S3_BUCKET'] || raise('Must specify S3_BUCKET')
 
       Tempfile.create(partition_name) do |f|
