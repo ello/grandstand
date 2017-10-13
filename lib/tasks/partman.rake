@@ -24,7 +24,6 @@ namespace :db do
         to_a.
         map { |r| r['show_partitions'].split(',')[1].gsub(')', '') }.
         sort.
-        reverse.
         take(10) # limit to keep task run time down.
 
       all_partitions.each do |partition_name|
