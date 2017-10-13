@@ -13,6 +13,7 @@ before_script:
 - curl -L -O https://github.com/keithf4/pg_partman/archive/v2.6.2.tar.gz
 - tar -zxvf v2.6.2.tar.gz
 - cd pg_partman-2.6.2 && sudo make NO_BGW=1 install
+- sudo service postgresql restart 9.6
 script:
   - rake db:test:prepare_all
   - RAILS_ENV=test rake spec
