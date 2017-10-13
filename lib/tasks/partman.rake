@@ -25,7 +25,7 @@ namespace :db do
         map { |r| r['show_partitions'].split(',')[1].gsub(')', '') }.
         sort.
         reverse.
-        limit(10) # limit to keep task run time down.
+        take(10) # limit to keep task run time down.
 
       all_partitions.each do |partition_name|
         parsed = /impressions_p(\d{4})_(\d{2})_(\d{2})/.match(partition_name)
