@@ -37,8 +37,8 @@ namespace :db do
           Rake::Task['db:partman:archive_partition'].reenable
           days_old = (Date.today - partition_date).to_i
           puts "Removing partitions older then #{days_old} days old"
-          Rake::Task['db:partman:delete_partitions'].invoke(days_old)
-          Rake::Task['db:partman:delete_partitions'].reenable
+          # Rake::Task['db:partman:delete_partitions'].invoke(days_old)
+          # Rake::Task['db:partman:delete_partitions'].reenable
         end
       end
     end
