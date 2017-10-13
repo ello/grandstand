@@ -29,7 +29,7 @@ namespace :db do
 
       all_partitions.each do |partition_name|
         parsed = /impressions_p(\d{4})_(\d{2})_(\d{2})/.match(partition_name)
-        partition_date = Date.new(parsed[1], parsed[2], parsed[3])
+        partition_date = Date.new(parsed[1].to_i, parsed[2].to_i, parsed[3].to_i)
 
         if partition_date < 180.days.ago
           puts "Archiving #{partition_name}"
