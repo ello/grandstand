@@ -32,5 +32,20 @@ class ArtistInviteHourlyImpression < AggregationRecord
       ORDER BY
         date(starting_at) ASC;}).to_a
     end
+
+    def total_aggregation(artist_invite_id)
+      san_artist_invite_id = ActiveRecord::Base::sanitize(artist_invite_id)
+
+      AggregationRecord.connection.execute(%Q{
+      SELECT
+        t.artist_invite_id,
+        sum(t.logged_out_views) + sum(t.logged_in_views) as "total_impressions"
+      FROM
+        artist_invite_hourly_impressions t
+      WHERE
+        t.artist_invite_id = #{san_artist_invite_id}
+      GROUP BY
+        t.artist_invite_id;}).to_a
+    end
   end
 end
