@@ -31,5 +31,12 @@ module Grandstand
 
     # Use SQL-formatted schema dumps for Partman
     config.active_record.schema_format = :sql
+
+    # Use basic auth if it's configured
+    if ENV['BASIC_AUTH_USER'] && ENV['BASIC_AUTH_PASSWORD']
+      config.middleware.use ::Rack::Auth::Basic do |u, p|
+        [ u, p ] == [ ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD'] ]
+      end
+    end
   end
 end
