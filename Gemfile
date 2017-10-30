@@ -12,6 +12,8 @@ gem 'interactor-rails'
 gem 'dotenv-rails'
 gem 'newrelic_rpm'
 
+gem 'aws-sdk'
+
 group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
