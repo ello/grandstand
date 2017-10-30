@@ -29,7 +29,12 @@ RSpec.describe 'GET /api/v1/artist_invites/:id/daily', type: :request do
 
       expect(response.status).to eq(200)
       expect(response_json['data'].length).to eq(10)
-      expect(response_json['data'][0]).to eq({ "artist_invite_id"=>"1", "date"=>"2017-01-01", "impressions"=>10 })
+      expect(response_json['data'][0]).to eq({
+        "artist_invite_id"=>"1",
+        "date"=>"2017-01-01",
+        "impressions"=>10,
+        "stream_kind" => nil,
+      })
     end
   end
 

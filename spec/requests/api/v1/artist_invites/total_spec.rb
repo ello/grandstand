@@ -25,7 +25,11 @@ RSpec.describe 'GET /api/v1/artist_invites/:id/total', type: :request do
       get "/api/v1/artist_invites/#{artist_invite_id}/total", headers: basic_auth_headers('user', 'password')
 
       expect(response.status).to eq(200)
-      expect(response_json['data']).to eq({ "artist_invite_id" => "1", "total_impressions" => 100 })
+      expect(response_json['data']).to eq({
+        "artist_invite_id" => "1",
+        "impressions" => 100,
+        "stream_kind" => nil,
+      })
     end
   end
 

@@ -18,9 +18,10 @@ class ArtistInviteHourlyImpression < AggregationRecord
 
       AggregationRecord.connection.execute(%Q{
       SELECT
-        t.artist_invite_id,
+        t.artist_invite_id as "artist_invite_id",
         date(t.starting_at) as "date",
-        sum(t.logged_out_views) + sum(t.logged_in_views) as "impressions"
+        sum(t.logged_out_views) + sum(t.logged_in_views) as "impressions",
+        null as "stream_kind"
       FROM
         artist_invite_hourly_impressions t
       WHERE
@@ -38,8 +39,9 @@ class ArtistInviteHourlyImpression < AggregationRecord
 
       AggregationRecord.connection.execute(%Q{
       SELECT
-        t.artist_invite_id,
-        sum(t.logged_out_views) + sum(t.logged_in_views) as "total_impressions"
+        t.artist_invite_id as "artist_invite_id",
+        sum(t.logged_out_views) + sum(t.logged_in_views) as "impressions",
+        null as "stream_kind"
       FROM
         artist_invite_hourly_impressions t
       WHERE
