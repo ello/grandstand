@@ -1,3 +1,8 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      match 'artist_invites/:id/daily', to: 'artist_invites#daily', via: :get
+      match 'artist_invites/:id/total', to: 'artist_invites#total', via: :get
+    end
+  end
 end
