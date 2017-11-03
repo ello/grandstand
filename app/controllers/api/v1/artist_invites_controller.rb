@@ -34,9 +34,9 @@ class Api::V1::ArtistInvitesController < ApplicationController
 
   def total_json_response(impressions)
     if impressions
-      { data: impressions }.to_json
+      { data: [impressions] }.to_json
     else
-      { data: { artist_invite_id: artist_invite_id, impressions: 0, stream_kind: nil } }.to_json
+      { data: [{ artist_invite_id: artist_invite_id, impressions: 0, stream_kind: nil }] }.to_json
     end
   end
 end
