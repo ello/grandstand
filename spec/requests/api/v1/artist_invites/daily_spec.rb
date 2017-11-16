@@ -20,10 +20,11 @@ RSpec.describe 'GET /api/v1/artist_invites/:id/daily', type: :request do
   context 'Authenticated Request' do
     before do
       reset_aggregation_db
-      create_hourly_impressions
     end
 
     it 'should return daily post impression count' do
+      create_hourly_impressions
+
       get "/api/v1/artist_invites/#{artist_invite_id}/daily", params: { starting: starting, ending: ending },
                                                               headers: basic_auth_headers('user', 'password')
 
@@ -35,6 +36,13 @@ RSpec.describe 'GET /api/v1/artist_invites/:id/daily', type: :request do
         "impressions"=>10,
         "stream_kind" => nil,
       })
+    end
+
+    it 'should return proper response with 0 impressions' do
+      get "/api/v1/artist_invites/#{artist_invite_id}/daily", params: { starting: starting, ending: ending },
+                                                              headers: basic_auth_headers('user', 'password')
+
+      expect(response.status).to eq(204)
     end
   end
 

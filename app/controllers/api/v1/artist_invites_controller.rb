@@ -3,7 +3,11 @@ class Api::V1::ArtistInvitesController < ApplicationController
     impressions = ArtistInviteHourlyImpression
                   .daily_aggregation(start_date, end_date, artist_invite_id)
 
-    render json: { data: impressions }.to_json
+    if impressions.empty?
+      head :no_content
+    else
+      render json: { data: impressions }.to_json
+    end
   end
 
   def total
@@ -11,7 +15,7 @@ class Api::V1::ArtistInvitesController < ApplicationController
                         .total_aggregation(artist_invite_id)
                         .first
 
-    render json: { data: total_impressions }.to_json
+    render json: total_json_response(total_impressions)
   end
 
   private
@@ -26,5 +30,13 @@ class Api::V1::ArtistInvitesController < ApplicationController
 
   def end_date
     params[:ending]
+  end
+
+  def total_json_response(impressions)
+    if impressions
+      { data: [impressions] }.to_json
+    else
+      { data: [{ artist_invite_id: artist_invite_id, impressions: 0, stream_kind: nil }] }.to_json
+    end
   end
 end
