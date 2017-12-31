@@ -25,6 +25,8 @@ class CreateEventFromStream
       end
     rescue ActiveRecord::RecordNotUnique => e
       context.fail!(error: e)
+    rescue ArgumentError => e
+      context.fail!(error: e)
     end
   end
   add_transaction_tracer :post_was_viewed, category: :task
