@@ -12,7 +12,7 @@ class ArtistInviteHourlyImpression < AggregationRecord
     end
 
     def daily_aggregation(start_date, end_date, artist_invite_id)
-      san_start_date = ActiveRecord::Base::sanitize_sql([
+      san_start_date = ActiveRecord::Sanitization::sanitize_sql([
         "t.starting_at >= ? AND t.starting_at <= ? AND t.artist_invite_id = ?",
         start_date, end_date, artist_invite_id
       ])
@@ -35,7 +35,7 @@ class ArtistInviteHourlyImpression < AggregationRecord
     end
 
     def total_aggregation(artist_invite_id)
-      san_artist_invite_id = ActiveRecord::Base::sanitize_sql(["t.artist_invite_id = ?", artist_invite_id])
+      san_artist_invite_id = ActiveRecord::Sanitization::sanitize_sql(["t.artist_invite_id = ?", artist_invite_id])
 
       AggregationRecord.connection.execute(%Q{
       SELECT
