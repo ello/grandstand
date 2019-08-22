@@ -1,4 +1,5 @@
 sudo: required
+cache: bundler
 dist: trusty
 language: ruby
 bundler_args: "--without production"
