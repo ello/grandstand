@@ -242,6 +242,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
+  bundler (= 2.0.2)
   danger
   database_cleaner
   dotenv-rails
