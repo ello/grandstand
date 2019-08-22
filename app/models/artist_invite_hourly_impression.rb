@@ -1,5 +1,7 @@
 class ArtistInviteHourlyImpression < AggregationRecord
   class << self
+    extend ActiveRecord::Sanitization::ClassMethods
+
     def create_or_update(attrs)
       where(
         artist_invite_id: attrs[:artist_invite_id],
@@ -12,7 +14,7 @@ class ArtistInviteHourlyImpression < AggregationRecord
     end
 
     def daily_aggregation(start_date, end_date, artist_invite_id)
-      sanitized_query = ActiveRecord::Sanitization.sanitize_sql([
+      sanitized_query = sanitize_sql([
         "t.starting_at >= ? AND t.starting_at <= ? AND t.artist_invite_id = ?",
         start_date, end_date, artist_invite_id
       ])
@@ -35,7 +37,7 @@ class ArtistInviteHourlyImpression < AggregationRecord
     end
 
     def total_aggregation(artist_invite_id)
-      sanitized_query = ActiveRecord::Sanitization.sanitize_sql(["t.artist_invite_id = ?", artist_invite_id])
+      sanitized_query = sanitize_sql(["t.artist_invite_id = ?", artist_invite_id])
 
       AggregationRecord.connection.execute(%Q{
       SELECT
