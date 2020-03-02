@@ -5,7 +5,7 @@ ruby '2.3.1'
 gem 'bundler', '2.0.2'
 gem 'rails', '~> 5.2', '>= 5.2.0'
 gem 'pg', '~> 0.18'
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.12'
 gem 'nokogiri', '>= 1.10.4'
 
 gem 'kinesis-stream-reader', require: 'stream_reader', github: 'ello/kinesis-stream-reader'
