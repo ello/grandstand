@@ -113,7 +113,8 @@ GEM
       interactor (~> 3.0)
       rails (>= 4.2, < 5.3)
     jmespath (1.4.0)
-    kramdown (2.1.0)
+    kramdown (2.3.0)
+      rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     librato-metrics (2.1.2)
@@ -190,6 +191,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (3.2.2)
+    rexml (3.2.4)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
