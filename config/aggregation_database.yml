@@ -8,10 +8,12 @@ default: &default
 development:
   <<: *default
   database: grandstand_aggregation_development
+
 test:
   <<: *default
   database: grandstand_aggregation_test
+
 production:
   adapter: postgresql
-  url:  <%= ENV['AGGREGATION_DATABASE_URL'] %>
+  url: <%= ENV['AGGREGATION_DATABASE_URL'] %>
   pool: <%= ENV['AGGREGATION_DB_POOL'] || ENV['RAILS_MAX_THREADS'] || 5 %>

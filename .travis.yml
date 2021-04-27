@@ -3,20 +3,20 @@ dist: trusty
 language: ruby
 bundler_args: "--without production"
 services:
-- postgresql
-- redis
+  - postgresql
+  - redis
 addons:
-  postgresql: '9.6'
+  postgresql: "9.6"
   apt:
     packages:
-    - postgresql-server-dev-9.6
+      - postgresql-server-dev-9.6
 before_install:
-- gem update --system
-- gem install bundler
-- script/install-partman
+  - gem update --system
+  - gem install bundler
+  - script/install-partman
 before_script:
-- bundle exec danger
-- sudo service postgresql restart 9.6
+  - bundle exec danger
+  - sudo service postgresql restart 9.6
 script:
   - rake db:test:prepare_all
   - RAILS_ENV=test rake spec
