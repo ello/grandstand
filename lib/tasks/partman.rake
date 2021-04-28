@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-PARTMAN_VERSION = '2.6.2'
+PARTMAN_VERSION = '2.6.4'
 
 namespace :db do
   namespace :partman do
