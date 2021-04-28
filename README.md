@@ -4,7 +4,7 @@
 
 Service for warehousing impressions
 
-[![Build Status](https://travis-ci.com/ello/grandstand.svg?branch=master)](https://travis-ci.com/ello/grandstand)
+[![Build Status](https://travis-ci.com/ello/grandstand.svg?branch=main)](https://travis-ci.com/ello/grandstand)
 
 ## Design Goals
 
@@ -125,7 +125,7 @@ re-push to your own Heroku remote after you create an app. A couple of caveats:
 
 ## License
 
-This project is released under the [MIT License](blob/master/LICENSE.txt)
+This project is released under the [MIT License](blob/main/LICENSE.txt)
 
 ## Code of Conduct
 
