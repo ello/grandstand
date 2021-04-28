@@ -27,6 +27,8 @@ end
 group :development do
   gem 'listen', '~> 3.0.5'
   gem 'danger'
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :production do
