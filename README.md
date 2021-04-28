@@ -4,7 +4,7 @@
 
 Service for warehousing impressions
 
-[![Build Status](https://travis-ci.org/ello/grandstand.svg?branch=master)](https://travis-ci.org/ello/grandstand)
+[![Build Status](https://travis-ci.com/ello/grandstand.svg?branch=master)](https://travis-ci.com/ello/grandstand)
 
 ## Design Goals
 
