@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateUserHourlyImpressions < ActiveRecord::Migration[5.0]
   def change
     create_table :user_hourly_impressions do |t|
@@ -6,6 +8,6 @@ class CreateUserHourlyImpressions < ActiveRecord::Migration[5.0]
       t.integer :views, null: false
     end
 
-    add_index :user_hourly_impressions, [:author_id, :starting_at], name: 'user_hourly_impressions_full_index', unique: true
+    add_index :user_hourly_impressions, %i[author_id starting_at], name: 'user_hourly_impressions_full_index', unique: true
   end
 end

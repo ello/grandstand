@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AggregatedUser
 
   class << self
@@ -13,9 +15,9 @@ class AggregatedUser
     end
 
     def get(username)
-      if id = redis.hget(key, username)
-        new(id.to_i, username)
-      end
+      return unless (id = redis.hget(key, username))
+
+      new(id.to_i, username)
     end
 
     def remove(username)
@@ -40,6 +42,7 @@ class AggregatedUser
   attr_accessor :id, :username
 
   def initialize(id, username)
-    @id, @username = id, username
+    @id = id
+    @username = username
   end
 end

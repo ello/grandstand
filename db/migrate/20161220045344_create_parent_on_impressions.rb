@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateParentOnImpressions < ActiveRecord::Migration[5.0]
   def up
     execute "SELECT partman.create_parent('public.impressions', 'created_at', 'time', 'daily')"

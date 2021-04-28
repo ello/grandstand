@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UpdateDailyEmailActiveUserRollups, type: :model, freeze_time: true do
@@ -15,35 +17,35 @@ RSpec.describe UpdateDailyEmailActiveUserRollups, type: :model, freeze_time: tru
       stream_id: 1,
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 1,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 2,
-      viewer_id: nil,
+      viewer_id: nil
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 2, 12, 15),
       stream_kind: 'email',
       author_id: 0,
       post_id: 3,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 2, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
     described_class.call(date: Date.new(2017, 1, 2))
     expect(EmailActiveUserRollup.count).to eq(1)
@@ -59,35 +61,35 @@ RSpec.describe UpdateDailyEmailActiveUserRollups, type: :model, freeze_time: tru
       stream_id: 1,
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 1,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 2,
-      viewer_id: nil,
+      viewer_id: nil
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 2, 12, 15),
       stream_kind: 'email',
       author_id: 0,
       post_id: 3,
-      viewer_id: 1,
+      viewer_id: 1
     )
     Impression.create(
       created_at: DateTime.new(2017, 1, 2, 12, 45),
       stream_kind: 'email',
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
     EmailActiveUserRollup.create(
       day: Date.new(2017, 1, 2),

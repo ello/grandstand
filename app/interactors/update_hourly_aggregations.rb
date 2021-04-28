@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class UpdateHourlyAggregations
   include Interactor
   include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
 
   def call
-    (start_of_day ... end_of_day).step(1.hour).each do |hour|
+    (start_of_day...end_of_day).step(1.hour).each do |hour|
       start_of_hour = Time.at(hour).utc
       end_of_hour = start_of_hour.end_of_hour
       update_between(start_of_hour, end_of_hour)
@@ -24,21 +26,21 @@ class UpdateHourlyAggregations
   def track_category_views(start, query)
     category_views(query).each do |stream_id, counts|
       HourlyImpression.create_or_update(
-        starting_at:      start,
-        stream_kind:      'category',
-        stream_id:        stream_id,
-        logged_in_views:  counts[:logged_in_views],
-        logged_out_views: counts[:logged_out_views],
+        starting_at: start,
+        stream_kind: 'category',
+        stream_id: stream_id,
+        logged_in_views: counts[:logged_in_views],
+        logged_out_views: counts[:logged_out_views]
       )
     end
   end
 
   def category_views(query)
-    query.
-      where(stream_kind: 'category').
-      group(:stream_id, "viewer_id IS NOT NULL").
-      count.
-      each_with_object({}) do |(k, count), views|
+    query
+      .where(stream_kind: 'category')
+      .group(:stream_id, 'viewer_id IS NOT NULL')
+      .count
+      .each_with_object({}) do |(k, count), views|
         stream_id = k[0]
         logged_in = k[1]
         views[stream_id] ||= {}
@@ -53,20 +55,20 @@ class UpdateHourlyAggregations
   def track_stream_views(start, query)
     stream_views(query).each do |stream_kind, counts|
       HourlyImpression.create_or_update(
-        starting_at:      start,
-        stream_kind:      stream_kind,
-        logged_in_views:  counts[:logged_in_views],
-        logged_out_views: counts[:logged_out_views],
+        starting_at: start,
+        stream_kind: stream_kind,
+        logged_in_views: counts[:logged_in_views],
+        logged_out_views: counts[:logged_out_views]
       )
     end
   end
 
   def stream_views(query)
-    query.
-      where.not(stream_kind: 'category').
-      group(:stream_kind, "viewer_id IS NOT NULL").
-      count.
-      each_with_object({}) do |(k, count), views|
+    query
+      .where.not(stream_kind: 'category')
+      .group(:stream_kind, 'viewer_id IS NOT NULL')
+      .count
+      .each_with_object({}) do |(k, count), views|
         stream_kind = k[0]
         logged_in   = k[1]
         views[stream_kind] ||= {}
@@ -81,20 +83,20 @@ class UpdateHourlyAggregations
   def track_unknown_views(start, query)
     unknown_views(query).each do |stream_kind, counts|
       HourlyImpression.create_or_update(
-        starting_at:      start,
-        stream_kind:      stream_kind,
-        logged_in_views:  counts[:logged_in_views],
-        logged_out_views: counts[:logged_out_views],
+        starting_at: start,
+        stream_kind: stream_kind,
+        logged_in_views: counts[:logged_in_views],
+        logged_out_views: counts[:logged_out_views]
       )
     end
   end
 
   def unknown_views(query)
-    query.
-      where(stream_kind: nil).
-      group('viewer_id IS NOT NULL').
-      count.
-      each_with_object({}) do |(k, count), views|
+    query
+      .where(stream_kind: nil)
+      .group('viewer_id IS NOT NULL')
+      .count
+      .each_with_object({}) do |(k, count), views|
         logged_in   = k
         stream_kind = 'unknown'
         views[stream_kind] ||= {}

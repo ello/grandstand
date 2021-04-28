@@ -1,49 +1,51 @@
+# frozen_string_literal: true
+
 task spec: ['aggregation:db:test:prepare']
 
 namespace :aggregation do
 
   namespace :db do |ns|
 
-    task :drop do
+    task drop: :environment do
       Rake::Task['db:drop'].invoke
     end
 
-    task :create do
+    task create: :environment do
       Rake::Task['db:create'].invoke
     end
 
-    task :setup do
+    task setup: :environment do
       Rake::Task['db:setup'].invoke
     end
 
-    task :migrate do
+    task migrate: :environment do
       Rake::Task['db:migrate'].invoke
     end
 
-    task :rollback do
+    task rollback: :environment do
       Rake::Task['db:rollback'].invoke
     end
 
-    task :seed do
+    task seed: :environment do
       Rake::Task['db:seed'].invoke
     end
 
-    task :version do
+    task version: :environment do
       Rake::Task['db:version'].invoke
     end
 
     namespace :schema do
-      task :load do
+      task load: :environment do
         Rake::Task['db:schema:load'].invoke
       end
 
-      task :dump do
+      task dump: :environment do
         Rake::Task['db:schema:dump'].invoke
       end
     end
 
     namespace :test do
-      task :prepare do
+      task prepare: :environment do
         Rake::Task['db:test:prepare'].invoke
       end
     end
@@ -56,7 +58,7 @@ namespace :aggregation do
     end
   end
 
-  task :set_custom_config do
+  task set_custom_config: :environment do
     # save current vars
     @original_config = {
       env_schema: ENV['SCHEMA'],
@@ -71,7 +73,7 @@ namespace :aggregation do
     Rails.application.config.paths['config/database'] = ['config/aggregation_database.yml']
   end
 
-  task :revert_to_original_config do
+  task revert_to_original_config: :environment do
     # reset config variables to original values
     ENV['SCHEMA'] = @original_config[:env_schema]
     Rails.application.config = @original_config[:config]

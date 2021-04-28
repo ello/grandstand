@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: true do
@@ -16,8 +18,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 0,
       viewer_id: 1,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'following',
@@ -25,8 +28,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 1,
       viewer_id: 2,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 16),
       stream_kind: 'love',
@@ -34,8 +38,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 2,
       viewer_id: nil,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 46),
       stream_kind: 'love',
@@ -43,8 +48,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 3,
       viewer_id: 1,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'user',
@@ -52,8 +58,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 4,
       viewer_id: nil,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'category',
@@ -61,8 +68,9 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 5,
       viewer_id: nil,
-      artist_invite_id: 1,
+      artist_invite_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'category',
@@ -70,7 +78,7 @@ RSpec.describe UpdateArtistInviteHourlyAggregations, type: :model, freeze_time: 
       author_id: 0,
       post_id: 6,
       viewer_id: nil,
-      artist_invite_id: 2,
+      artist_invite_id: 2
     )
     described_class.call(date: Date.new(2017, 1, 1))
     expect(ArtistInviteHourlyImpression.count).to eq(5)

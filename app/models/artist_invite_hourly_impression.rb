@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ArtistInviteHourlyImpression < AggregationRecord
   class << self
     extend ActiveRecord::Sanitization::ClassMethods
@@ -5,21 +7,21 @@ class ArtistInviteHourlyImpression < AggregationRecord
     def create_or_update(attrs)
       where(
         artist_invite_id: attrs[:artist_invite_id],
-        starting_at:      attrs[:starting_at],
-        stream_kind:      attrs[:stream_kind],
+        starting_at: attrs[:starting_at],
+        stream_kind: attrs[:stream_kind]
       ).first_or_initialize.update!(
-        logged_in_views:  (attrs[:logged_in_views] || 0),
-        logged_out_views: (attrs[:logged_out_views] || 0),
+        logged_in_views: (attrs[:logged_in_views] || 0),
+        logged_out_views: (attrs[:logged_out_views] || 0)
       )
     end
 
     def daily_aggregation(start_date, end_date, artist_invite_id)
       sanitized_query = sanitize_sql([
-        "t.starting_at >= ? AND t.starting_at <= ? AND t.artist_invite_id = ?",
-        start_date, end_date, artist_invite_id
-      ])
+                                       't.starting_at >= ? AND t.starting_at <= ? AND t.artist_invite_id = ?',
+                                       start_date, end_date, artist_invite_id
+                                     ])
 
-      AggregationRecord.connection.execute(%Q{
+      AggregationRecord.connection.execute(%{
       SELECT
         t.artist_invite_id as "artist_invite_id",
         date(t.starting_at) as "date",
@@ -37,9 +39,9 @@ class ArtistInviteHourlyImpression < AggregationRecord
     end
 
     def total_aggregation(artist_invite_id)
-      sanitized_query = sanitize_sql(["t.artist_invite_id = ?", artist_invite_id])
+      sanitized_query = sanitize_sql(['t.artist_invite_id = ?', artist_invite_id])
 
-      AggregationRecord.connection.execute(%Q{
+      AggregationRecord.connection.execute(%{
       SELECT
         t.artist_invite_id as "artist_invite_id",
         sum(t.logged_out_views) + sum(t.logged_in_views) as "impressions",

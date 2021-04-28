@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class UpdateArtistInviteHourlyAggregations
   include Interactor
   include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
 
   def call
-    (start_of_day ... end_of_day).step(1.hour).each do |hour|
+    (start_of_day...end_of_day).step(1.hour).each do |hour|
       start_of_hour = Time.at(hour).utc
       end_of_hour = start_of_hour.end_of_hour
       update_between(start_of_hour, end_of_hour)
@@ -23,20 +25,20 @@ class UpdateArtistInviteHourlyAggregations
       stream_counts.each do |stream_kind, counts|
         ArtistInviteHourlyImpression.create_or_update(
           artist_invite_id: invite_id,
-          starting_at:      start,
-          stream_kind:      stream_kind,
-          logged_in_views:  counts[:logged_in_views],
-          logged_out_views: counts[:logged_out_views],
+          starting_at: start,
+          stream_kind: stream_kind,
+          logged_in_views: counts[:logged_in_views],
+          logged_out_views: counts[:logged_out_views]
         )
       end
     end
   end
 
   def views(query)
-    query.
-      group(:artist_invite_id, :stream_kind, "viewer_id IS NOT NULL").
-      count.
-      each_with_object({}) do |(k, count), views|
+    query
+      .group(:artist_invite_id, :stream_kind, 'viewer_id IS NOT NULL')
+      .count
+      .each_with_object({}) do |(k, count), views|
         invite_id   = k[0]
         stream_kind = k[1]
         logged_in   = k[2]

@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 class RemoveAggregatedUser
   include Interactor
   include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
 
   def call
-    if user = AggregatedUser.get(context.username)
-      if context.purge
-        UserHourlyAggregations.where(author_id: user.id).destroy_all
-      end
-      AggregatedUser.remove(context.username)
-    end
+    return unless (user = AggregatedUser.get(context.username))
+
+    UserHourlyAggregations.where(author_id: user.id).destroy_all if context.purge
+    AggregatedUser.remove(context.username)
   end
 end

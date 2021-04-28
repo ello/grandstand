@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TransactionSkipping
   extend ActiveSupport::Concern
 
@@ -13,12 +15,10 @@ module TransactionSkipping
     end
 
     def skip_transaction
-      begin
         Thread.current[:skip_transaction] = true
         yield
-      ensure
-        Thread.current[:skip_transaction] = nil
-      end
+    ensure
+      Thread.current[:skip_transaction] = nil
     end
   end
 end

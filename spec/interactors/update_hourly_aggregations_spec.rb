@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
 
   before do
@@ -15,39 +18,43 @@ RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
       stream_id: 1,
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'following',
       stream_id: 2,
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 16),
       stream_kind: 'love',
       stream_id: 1,
       author_id: 0,
       post_id: 2,
-      viewer_id: nil,
+      viewer_id: nil
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 46),
       stream_kind: 'love',
       stream_id: 2,
       author_id: 0,
       post_id: 3,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'user',
       stream_id: 2,
       author_id: 0,
       post_id: 4,
-      viewer_id: nil,
+      viewer_id: nil
     )
     described_class.call(date: Date.new(2017, 1, 1))
     expect(HourlyImpression.count).to eq(3)
@@ -72,23 +79,25 @@ RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
       stream_id: 1,
       author_id: 0,
       post_id: 2,
-      viewer_id: nil,
+      viewer_id: nil
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 46),
       stream_kind: 'category',
       stream_id: 1,
       author_id: 0,
       post_id: 3,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 45),
       stream_kind: 'category',
       stream_id: 2,
       author_id: 0,
       post_id: 4,
-      viewer_id: nil,
+      viewer_id: nil
     )
     described_class.call(date: Date.new(2017, 1, 1))
     expect(HourlyImpression.count).to eq(2)
@@ -102,36 +111,39 @@ RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
 
   it 'creates an hourly impression record for each hour' do
     Impression.create(
-      created_at: DateTime.new(2017, 1, 1, 12, 00, 00),
+      created_at: DateTime.new(2017, 1, 1, 12, 0o0, 0o0),
       stream_kind: 'following',
       stream_id: 1,
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 12, 59, 59),
       stream_kind: 'following',
       stream_id: 2,
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
+
     Impression.create(
-      created_at: DateTime.new(2017, 1, 1, 13, 00, 00),
+      created_at: DateTime.new(2017, 1, 1, 13, 0o0, 0o0),
       stream_kind: 'following',
       stream_id: 1,
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 13, 59, 59),
       stream_kind: 'following',
       stream_id: 2,
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
     described_class.call(date: Date.new(2017, 1, 1))
     expect(HourlyImpression.count).to eq(2)
@@ -139,20 +151,23 @@ RSpec.describe UpdateHourlyAggregations, type: :model, freeze_time: true do
 
   it 'includes impressions not tagged with a stream kind' do
     Impression.create(
-      created_at: DateTime.new(2017, 1, 1, 13, 00, 00),
+      created_at: DateTime.new(2017, 1, 1, 13, 0o0, 0o0),
       author_id: 0,
       post_id: 0,
-      viewer_id: 1,
+      viewer_id: 1
     )
+
     Impression.create(
       created_at: DateTime.new(2017, 1, 1, 13, 59, 59),
       author_id: 0,
       post_id: 1,
-      viewer_id: 2,
+      viewer_id: 2
     )
     described_class.call(date: Date.new(2017, 1, 1))
     expect(HourlyImpression.count).to eq(1)
-    no_stream = HourlyImpression.last
+
+    HourlyImpression.last
   end
 
 end
+# rubocop:enable Metrics/BlockLength

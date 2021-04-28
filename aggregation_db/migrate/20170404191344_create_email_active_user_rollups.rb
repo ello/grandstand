@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateEmailActiveUserRollups < ActiveRecord::Migration[5.0]
   def change
     create_table :email_active_user_rollups do |t|
